@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  glance-share:
+    build: .
+    container_name: glance-share
+    command:
+      - -c
+      - |
+        tailscaled &
+        sleep 5
+        tailscale up --authkey tskey-auth-kdvWEWXRSC21CNTRL-EkqfqDtJqoQEFYZTBpVBoQnECvBG5yxBb --hostname glance-share
+        while true; do
+          ONLINE=$(tailscale status --json | jq -r '.Self.Online')
+          IP=$(tailscale status --json | jq -r '.Self.TailscaleIPs[0]')
+          echo -e "Status: $ONLINE\nIP: $IP" > /glance-share/tailscale/tailscale.txt
+          sleep 10
+        done
+    volumes:
+      - /volume2/docker/glance-share:/glance-share
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
