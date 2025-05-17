@@ -9,7 +9,7 @@ services:
       - |
         tailscaled &
         sleep 5
-        tailscale up --authkey tskey-auth-kdvWEWXRSC21CNTRL-EkqfqDtJqoQEFYZTBpVBoQnECvBG5yxBb --hostname glance-share
+        tailscale up --authkey tskey-auth-kdvWEWXRSC2 --hostname glance-share
         while true; do
           ONLINE=$(tailscale status --json | jq -r '.Self.Online')
           IP=$(tailscale status --json | jq -r '.Self.TailscaleIPs[0]')
